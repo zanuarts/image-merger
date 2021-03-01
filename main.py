@@ -3,26 +3,30 @@ import glob
 import random
 import PIL.ImageOps 
 
-for i in range(0, 1000):
-    list_img = []
-    images = glob.glob("data/train_images/*.png")
+TOTAL_MERGED_IMAGE = 10
+TRAIN_IMAGE_DIRECTORY = "data/train_images"
+TRAIN_IMAGE_FILETYPE = ".png"
 
-    for image in images:
-        d = random.choice(images)
-        list_img.append(d)
-        if len(list_img) > 10:
-            break
+TOTAL_LETTER = 10
+LETTER_SIZE = 100
+CANVAS_WIDTH = 500
+CANVAS_HEIGHT = 200
 
-    print(list_img)
 
-    new_img = Image.new('RGB', (500, 200))
-    index = 0
+print('Generating merged images...')
+images_path = glob.glob(f'{TRAIN_IMAGE_DIRECTORY}/*{TRAIN_IMAGE_FILETYPE}')
 
-    for j in range(0, 500, 100):
-        for k in range(0, 200, 100):
-            img = Image.open(list_img[index])
-            new_img.paste(img, (j,k))
-            index+=1
+for i in range(0, TOTAL_MERGED_IMAGE):
+    random.shuffle(images_path)
+    images = images_path[:TOTAL_LETTER]
 
-    new_img = PIL.ImageOps.invert(new_img)
-    new_img.save("data/merge/detect_%d.png"%(i+1))
+    canvas = Image.new('RGB', (CANVAS_WIDTH, CANVAS_HEIGHT))
+    for j in range(0, CANVAS_WIDTH, LETTER_SIZE):
+        for k in range(0, CANVAS_HEIGHT, LETTER_SIZE):
+            img = Image.open(images.pop())
+            canvas.paste(img, (j,k))
+
+    canvas = PIL.ImageOps.invert(canvas)
+    canvas.save(f'data/merge/detect_{i+1}.png')
+
+print(f'{TOTAL_MERGED_IMAGE} merged image(s) has succefully generated')

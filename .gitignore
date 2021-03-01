@@ -1,1 +1,5 @@
 env
+venv
+data/test_images/
+data/train_images/
+data/merge/detect*
