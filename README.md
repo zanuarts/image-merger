@@ -5,7 +5,7 @@ Automate your boring stuff with this merger
 Make sure you have Python 3 installed.
 
 1. Install requirements.txt
-> pip install requirements.txt
+> pip install -r requirements.txt
 
 2. Run
 > python main.py
